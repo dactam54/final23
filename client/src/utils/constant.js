@@ -50,6 +50,12 @@ export const adminSidebar = [
     icons: <RiBillLine size={22} />,
     path: path.SYSTEM + "/" + path.MANAGE_Bill_EXPORT,
   },
+
+  {
+    name: "Thẻ kho",
+    icons: <RiBillLine size={22} />,
+    path: path.SYSTEM + "/" + path.ALL_THE_KHO,
+  },
   // {
   //   name: "Báo cáo",
   //   icons: <RiBillLine size={22} />,

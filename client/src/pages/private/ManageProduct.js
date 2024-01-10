@@ -122,8 +122,8 @@ const ManageProduct = () => {
   const handleDeleteProduct = async (id) => {
     const response = await apiDeleteProduct(id);
     if (response.err === 0) {
-      toast.success(response.mes);
       setUpdate((prev) => !prev);
+      toast.success("Xóa thành công");
     } else toast.error(response.mes);
   };
 

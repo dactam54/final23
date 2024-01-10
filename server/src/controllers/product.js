@@ -256,6 +256,7 @@ export const updateVariants = async (req, res) => {
 export const importManyProducts = async (req, res) => {
   try {
     const data = req.body;
+    console.log('data',data);
     const response = await services.importManyProducts(data, req.user.id);
     return res.status(200).json(response);
   } catch (error) {

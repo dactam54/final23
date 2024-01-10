@@ -339,4 +339,19 @@ export const apiExportManyProduct = (data, uid) =>
     }
   });
 
+// get all the kho
 
+export const apiGetAllTheKhos =({params})=>{
+  return new Promise(async(resolve,reject)=>{
+    try {
+      const response = await axios({
+        method: "get",
+        url: "/api/v1/products/admin/get-all-the-kho",
+        params
+      });
+      resolve(response);
+    } catch (error) {
+      reject(error);
+    }
+  })
+}

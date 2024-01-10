@@ -17,6 +17,7 @@ import {
   ManageImportBill,
   PDF,
   ProductCardStore,
+  AllTheKho,
 } from "./pages/private";
 
 
@@ -37,6 +38,8 @@ function App() {
         </Route>
 
         <Route path={path.SYSTEM} element={<System />}>
+
+          {/* <Route path={path.LOGIN} element={<Login />} /> */}
           <Route path={path.STATISTICS} element={<Statistics />} />
           <Route path={path.PRODUCT_CARD_STORE} element={<ProductCardStore />} />
           <Route path={path.MANAGE_BRAND} element={<ManageBrand />} />
@@ -48,6 +51,7 @@ function App() {
           <Route path={path.MANAGE_Bill_EXPORT} element={<ManageExportBill />}/>
           <Route path={path.MANAGE_Bill_IMPORT} element={<ManageImportBill />}/>
           <Route path={path.MANAGE_USER} element={<ManageUser />} />
+          <Route path={path.ALL_THE_KHO} element={<AllTheKho />} />
           <Route path={"*"} element={<Statistics />} />
           
         </Route>

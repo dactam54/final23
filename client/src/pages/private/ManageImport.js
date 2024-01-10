@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { apiGetProductsAdmin,  apiImportManyProducts} from "../../apis/product";
+import { apiGetProductsAdmin, apiImportManyProducts } from "../../apis/product";
 import { useDispatch } from "react-redux";
 import actionTypes from "../../store/actions/actionTypes";
 import { toast } from "react-toastify";
@@ -31,7 +31,6 @@ const ManageImport = () => {
   const [openInsert, setOpenInsert] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState([]);
 
-
   const fetchProducts = React.useCallback(async () => {
     dispatch({ type: actionTypes.LOADING, flag: true });
     const response = await apiGetProductsAdmin({ page: page });
@@ -39,12 +38,39 @@ const ManageImport = () => {
     if (response.err === 0) setProducts(response.productDatas);
   }, [dispatch, page]);
 
-  const handleExport = async () => {
+
+   const [formData, setFormData] = useState({
+    shipper: '',
+    user: '',
+    date: '',
+  });
+
+  console.log("form", formData);
+
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+
+  const handleImport = async () => {
     const response = await apiImportManyProducts({
       hoaDons: selectedProducts?.map((p) => ({
         productId: p.productId,
         quantity: parseInt(p.quantity),
       })),
+      // shipper: formData.shipper,
+      // user: formData.user,
+      // date: formData.date,
+      formData: {
+        shipper: formData.shipper,
+        user: formData.user,
+        date: formData.date,
+      },
     });
 
     if (response?.id) {
@@ -53,9 +79,7 @@ const ManageImport = () => {
       fetchProducts();
     }
   };
-
-
-  console.log('selectedProducts',selectedProducts)
+  console.log("selectedProducts", selectedProducts);
   React.useEffect(() => {
     fetchProducts();
   }, [page, fetchProducts]);
@@ -116,41 +140,41 @@ const ManageImport = () => {
         sortable: false,
         width: 250,
         renderCell: (params) => (
-           <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={
-                            selectedProducts.find(
-                              (el) => el.productId === params.row.id) || false
-                          }
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setSelectedProducts([
-                                ...selectedProducts,
-                                {
-                                  productId: params.row.id,
-                                  name: params.row.name,
-                                  thumb: params.row.thumb,
-                                  quantity: 1,
-                                },
-                              ]);
-                            } else {
-                              setSelectedProducts(
-                                selectedProducts.filter(
-                                  (el) => el.productId !== params.row.id
-                                )
-                              );
-                            }
-                          }}
-                        />
-                      }
-                      label="Chọn sản phẩm"
-                    />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={
+                  selectedProducts.find(
+                    (el) => el.productId === params.row.id
+                  ) || false
+                }
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setSelectedProducts([
+                      ...selectedProducts,
+                      {
+                        productId: params.row.id,
+                        name: params.row.name,
+                        thumb: params.row.thumb,
+                        quantity: 1,
+                      },
+                    ]);
+                  } else {
+                    setSelectedProducts(
+                      selectedProducts.filter(
+                        (el) => el.productId !== params.row.id
+                      )
+                    );
+                  }
+                }}
+              />
+            }
+            label="Chọn sản phẩm"
+          />
         ),
       },
     ],
     [selectedProducts]
-
   );
 
   return (
@@ -158,18 +182,16 @@ const ManageImport = () => {
       <div className="flex items-center justify-between border-b border-gray-200">
         <h3 className="font-bold text-[30px] pb-4 ">Quản lý nhập</h3>
         <Button
-            variant="contained"
-            color="primary"
-            disabled={!selectedProducts?.length}
-            onClick={async () => {
-              setOpenInsert(true);
-            }}
-          >
-           Phiếu nhập
-          </Button>
+          variant="contained"
+          color="primary"
+          disabled={!selectedProducts?.length}
+          onClick={async () => {
+            setOpenInsert(true);
+          }}
+        >
+          Phiếu nhập
+        </Button>
       </div>
-
-
 
       <div className="py-4">
         <div>
@@ -199,7 +221,6 @@ const ManageImport = () => {
             />
           )}
         </div>
-
       </div>
       <Modal
         open={openInsert}
@@ -209,8 +230,17 @@ const ManageImport = () => {
       >
         <Box sx={style}>
           <div>
-            <h3 className="font-bold text-[30px] pb-4 ">Sản phẩm đã chọn</h3>
+            <h3 className="font-bold text-[30px] pb-4 ">Phiếu nhập</h3>
+            <div>
+            <label htmlFor="shipper">Người giao :</label>
+            <input type="text" id="shipper" name="shipper" value={formData.shipper} onChange={handleInputChange}/>
 
+            <label htmlFor="user">Người nhận :</label>
+            <input type="text" id="user" name="user" value={formData.user} onChange={handleInputChange}/>
+
+            <label htmlFor="date">Ngày Nhập:</label>
+            <input type="datetime-local" id="date" name="date" value={formData.date} onChange={handleInputChange}/>
+            </div>
             <div>
               <table className="table-auto w-full mt-4">
                 <thead>
@@ -289,7 +319,7 @@ const ManageImport = () => {
                   variant="contained"
                   color="success"
                   onClick={async () => {
-                    await handleExport();
+                    await handleImport();
                     setOpenInsert(false);
                   }}
                 >

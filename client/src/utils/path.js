@@ -12,6 +12,7 @@ const path = {
     MANAGE_Bill_EXPORT: 'quan-ly-phieu-xuat',
     MANAGE_Bill_IMPORT: 'quan-ly-phieu-nhap',
     STATISTICS: 'thong-ke',
+    ALL_THE_KHO: 'the-kho',
     PDF: 'bao-cao',
     
 }
