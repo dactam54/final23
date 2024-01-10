@@ -2,7 +2,6 @@ const path = {
     PUBLIC: '/*',
     HOME: '',
     LOGIN: 'login',
-
     SYSTEM: 'he-thong',
     PRODUCT_CARD_STORE: 'quan-ly-the-kho',
     MANAGE_USER: 'quan-ly-thanh-vien',

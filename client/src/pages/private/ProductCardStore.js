@@ -171,7 +171,8 @@ const ProductCardStore = () => {
     setPage2(newpage);
   };
 
- 
+  const [searchKeyword, setSearchKeyword] = useState('')
+console.log("searchKeyword", searchKeyword);
 
   useEffect(() => {
     fetchProducts();
@@ -180,6 +181,10 @@ const ProductCardStore = () => {
   return (
     <div style={{ textAlign: "center" }}>
       <h3 className="font-bold text-[30px] pb-2 ">Thông tin thẻ kho</h3>
+      <input  type="text"
+                className='bg-white text-gray-700 rounded-md py-2 px-4 w-full'
+                placeholder='Tìm kiếm hóa đơn'
+                onChange={e => setSearchKeyword(e.target.value)} />
       <Paper sx={{ width: "100%" }}>
         <TableContainer sx={{ maxHeight: 850 }}>
           <Table stickyHeader>
@@ -197,7 +202,7 @@ const ProductCardStore = () => {
             </TableHead>
             <TableBody>
               {data &&
-                data?.rows
+                data?.rows?.filter((i)=>{return i.name.toLowerCase().includes(searchKeyword.toLowerCase())})
                   ?.slice(page * rowPerPage, page * rowPerPage + rowPerPage)
                   .map((row, index) => {
                     return (

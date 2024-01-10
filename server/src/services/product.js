@@ -5,6 +5,7 @@ import { v4 as genId } from "uuid";
 import { sequelize } from "../config/connect-database";
 import uniqid from "uniqid";
 import prisma from "../lib/prisma";
+import moment from "moment";
 import { getCode } from "../lib/code";
 
 export const getProducts = ({
@@ -526,6 +527,7 @@ export const getCartAnon = (pids) =>
 
 // New
 // nhap nhieu
+// 1
 export const importManyProducts = async (data, userId) => {
   try {
     const response = await prisma.hoaDonNhap.create({
@@ -534,7 +536,7 @@ export const importManyProducts = async (data, userId) => {
         status: "pending",
         hoaDons: {
           createMany: {
-            data: data?.map((i) => ({
+            data: data?.hoaDons?.map((i) => ({
               maHoaDon: getCode(),
               // customer: {
               //     connect: {
@@ -552,12 +554,38 @@ export const importManyProducts = async (data, userId) => {
             })),
           },
         },
+        shipper: data?.shipper,
+        user: data?.user,
+        date: data?.date,
+      },
+      include: {
+        hoaDons: {
+          select: {
+            id: true,
+            productId: true,
+          },
+        },
       },
     });
 
+    await Promise.all(
+      data?.hoaDons?.map(async (i) => {
+        await prisma.theKho.create({
+          data: {
+            date: data?.date,
+            productId: i.productId,
+            type: "nhap",
+            hoaDonId: response?.hoaDons?.find(
+              (j) => j?.productId === i?.productId
+            )?.id,
+          },
+        });
+      })
+    );
+
     if (response?.id) {
       await Promise.all(
-        data?.map(async (i) => {
+        data?.hoaDons?.map(async (i) => {
           await prisma.product.update({
             where: {
               id: i?.productId,
@@ -580,6 +608,7 @@ export const importManyProducts = async (data, userId) => {
 };
 
 //xuat nhieu
+//2
 export const exportManyProducts = async (data, userId) => {
   try {
     const response = await prisma.hoaDonXuat.create({
@@ -588,7 +617,7 @@ export const exportManyProducts = async (data, userId) => {
         status: "pending",
         hoaDons: {
           createMany: {
-            data: data?.map((i) => ({
+            data: data?.hoaDons?.map((i) => ({
               maHoaDon: getCode(),
               // customer: {
               //     connect: {
@@ -606,12 +635,38 @@ export const exportManyProducts = async (data, userId) => {
             })),
           },
         },
+        shipper: data?.shipper,
+        user: data?.user,
+        date: data?.date,
+      },
+      include: {
+        hoaDons: {
+          select: {
+            id: true,
+            productId: true,
+          },
+        },
       },
     });
 
+    await Promise.all(
+      data?.hoaDons?.map(async (i) => {
+        await prisma.theKho.create({
+          data: {
+            date: data?.date,
+            productId: i.productId,
+            type: "xuat",
+            hoaDonId: response?.hoaDons?.find(
+              (j) => j?.productId === i?.productId
+            )?.id,
+          },
+        });
+      })
+    );
+
     if (response?.id) {
       await Promise.all(
-        data?.map(async (i) => {
+        data?.hoaDons?.map(async (i) => {
           await prisma.product.update({
             where: {
               id: i?.productId,
@@ -634,6 +689,7 @@ export const exportManyProducts = async (data, userId) => {
 };
 
 // get all phieu nhap services
+//3
 export const getImportProductDetailsAll = async () => {
   try {
     const allProducts = await prisma.hoaDonNhap.findMany({
@@ -648,7 +704,6 @@ export const getImportProductDetailsAll = async () => {
         },
       },
     });
-    console.log(allProducts);
     return allProducts;
   } catch (error) {
     console.log(error);
@@ -679,6 +734,7 @@ export const getExportProductDetailsAll = async () => {
 };
 
 //chi tiet phieu nhap
+//4
 export const getImportProductDetails = async (id) => {
   try {
     const data = await prisma.hoaDonNhap.findFirst({
@@ -720,6 +776,7 @@ export const getImportProductDetails = async (id) => {
 };
 
 // chi tiet phieu xuat
+//5
 export const getExportProductDetails = async (id) => {
   try {
     const data = await prisma.hoaDonXuat.findFirst({
@@ -761,6 +818,7 @@ export const getExportProductDetails = async (id) => {
 };
 
 // the kho nhap
+//6
 export const getImportProductsCard = async (id) => {
   try {
     const data = await prisma.hoaDonNhap.findMany({
@@ -817,6 +875,7 @@ export const getImportProductsCard = async (id) => {
 };
 
 // the kho xuat
+//7
 export const getExportProductsCard = async (id) => {
   try {
     const data = await prisma.hoaDonXuat.findMany({
@@ -868,6 +927,45 @@ export const getExportProductsCard = async (id) => {
 
     return output;
   } catch (error) {
+    throw new Error("Something went wrong!");
+  }
+};
+
+
+//the kho all
+//8
+export const getAllTheKhos = async (query, mode = "desc") => {
+  try {
+    // Xử lý giá trị mặc định cho startDate và endDate
+    const startDate = query?.startDate
+      ? moment(query.startDate)
+      : moment().startOf("day");
+    const endDate = query?.endDate
+      ? moment(query.endDate)
+      : moment().endOf("day");
+
+    const sd = startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZ");
+    const ed = endDate.format("YYYY-MM-DDTHH:mm:ss.SSSZ");
+
+    const data = await prisma.theKho.findMany({
+      include: {
+        hoaDon: true,
+        product: true,
+      },
+      where: {
+        date: {
+          gte: sd,
+          lte: ed,
+        },
+      },
+      orderBy: {
+        date: mode, // Sắp xếp theo date theo chiều giảm dần
+      },
+    });
+
+    return data;
+  } catch (error) {
+    console.log(error);
     throw new Error("Something went wrong!");
   }
 };

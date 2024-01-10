@@ -255,8 +255,8 @@ export const updateVariants = async (req, res) => {
 
 export const importManyProducts = async (req, res) => {
   try {
-    const { hoaDons } = req.body;
-    const response = await services.importManyProducts(hoaDons, req.user.id);
+    const data = req.body;
+    const response = await services.importManyProducts(data, req.user.id);
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json(error);
@@ -275,8 +275,8 @@ export const getImportProductDetails = async (req, res) => {
 
 export const exportManyProducts = async (req, res) => {
   try {
-    const { hoaDons } = req.body;
-    const response = await services.exportManyProducts(hoaDons, req.user.id);
+    const data = req.body;
+    const response = await services.exportManyProducts(data, req.user.id);
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json(error);
@@ -290,7 +290,7 @@ export const getImportProductDetailsAll = async (req, res) => {
 
     return res.status(200).json(response);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json(error);
   }
 };
@@ -301,7 +301,7 @@ export const getExportProductDetailsAll = async (req, res) => {
 
     return res.status(200).json(response);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json(error);
   }
 };
@@ -330,6 +330,16 @@ export const getExportProductsCard = async (req, res) => {
     const response = await services.getExportProductsCard(req.params.id);
     return res.status(200).json(response);
   } catch (error) {
+    return res.status(500).json(error);
+  }
+};
+
+export const getAllTheKhos = async (req, res) => {
+  try {
+    const response = await services.getAllTheKhos(req.query);
+    return res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
     return res.status(500).json(error);
   }
 };

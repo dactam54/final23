@@ -67,6 +67,7 @@ model Product {
   desc           String?
 
   hoaDons        HoaDon[]
+  theKhos        TheKho[]
 
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
@@ -90,6 +91,8 @@ model HoaDon {
   hoaDonNhapId Int?
   hoaDonNhap HoaDonNhap? @relation(fields: [hoaDonNhapId], references: [id])
 
+  theKhos TheKho[]
+
   quantity Int
 
   createdAt DateTime @default(now())
@@ -103,6 +106,10 @@ model HoaDonNhap {
   maHoaDon String @unique
   hoaDons HoaDon[]
   status Status @default(pending)
+  user String?
+  shipper String?
+    // ngày nhập
+  date DateTime? 
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -122,9 +129,35 @@ model HoaDonXuat {
   hoaDons HoaDon[]
   status Status @default(pending)
 
+  user String?
+  shipper String?
+    // ngày nhập
+  date DateTime? 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("hoa_don_xuat")
 }
 
+enum LoaiTheKho {
+  nhap
+  xuat
+}
+model TheKho {
+  id Int @id @default(autoincrement())
+  hoaDonId Int? 
+  hoaDon HoaDon? @relation(fields: [hoaDonId], references: [id])
+  productId String
+  type LoaiTheKho @default(nhap)
+  product Product @relation(fields: [productId], references: [id])
+  status Status @default(pending)
+
+  // ngày nhập
+  date DateTime? 
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("the_kho")
+}

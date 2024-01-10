@@ -98,5 +98,10 @@ router.get(
   [verifyToken, isAdmin],
   controllers.getExportProductsCard
 );
+router.get(
+  "/admin/get-all-the-kho",
+  [verifyToken, isAdmin],
+  controllers.getAllTheKhos
+);
 
 export default router;

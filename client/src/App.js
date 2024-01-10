@@ -33,7 +33,7 @@ function App() {
       <Routes>
         <Route path={path.PUBLIC} element={<Public />}>
           <Route path={path.LOGIN} element={<Login />} />
-          <Route path={path.DETAIL} element={<Detail />} />
+          {/* <Route path={path.DETAIL} element={<Detail />} /> */}
         </Route>
 
         <Route path={path.SYSTEM} element={<System />}>
