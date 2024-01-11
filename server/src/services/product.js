@@ -931,7 +931,6 @@ export const getExportProductsCard = async (id) => {
   }
 };
 
-
 //the kho all
 //8
 export const getAllTheKhos = async (query, mode = "desc") => {
@@ -947,21 +946,35 @@ export const getAllTheKhos = async (query, mode = "desc") => {
     const sd = startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZ");
     const ed = endDate.format("YYYY-MM-DDTHH:mm:ss.SSSZ");
 
+    console.log(sd, ed);
+
     const data = await prisma.theKho.findMany({
       include: {
         hoaDon: true,
         product: true,
       },
       where: {
-        date: {
-          gte: sd,
-          lte: ed,
-        },
+        OR: [
+          {
+            date: {
+              gte: sd,
+              lte: ed,
+            },
+          },
+          {
+            createdAt: {
+              gte: sd,
+              lte: ed,
+            },
+          },
+        ],
       },
       orderBy: {
         date: mode, // Sắp xếp theo date theo chiều giảm dần
       },
     });
+
+    console.log(data);
 
     return data;
   } catch (error) {

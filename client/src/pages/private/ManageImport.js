@@ -38,15 +38,13 @@ const ManageImport = () => {
     if (response.err === 0) setProducts(response.productDatas);
   }, [dispatch, page]);
 
-
-   const [formData, setFormData] = useState({
-    shipper: '',
-    user: '',
-    date: '',
+  const [formData, setFormData] = useState({
+    shipper: "",
+    user: "",
+    date: "",
   });
 
   console.log("form", formData);
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -55,7 +53,6 @@ const ManageImport = () => {
       [name]: value,
     });
   };
-
 
   const handleImport = async () => {
     const response = await apiImportManyProducts({
@@ -66,11 +63,8 @@ const ManageImport = () => {
       // shipper: formData.shipper,
       // user: formData.user,
       // date: formData.date,
-      formData: {
-        shipper: formData.shipper,
-        user: formData.user,
-        date: formData.date,
-      },
+      ...formData,
+      date: new Date(formData?.date),
     });
 
     if (response?.id) {
@@ -232,14 +226,32 @@ const ManageImport = () => {
           <div>
             <h3 className="font-bold text-[30px] pb-4 ">Phiếu nhập</h3>
             <div>
-            <label htmlFor="shipper">Người giao :</label>
-            <input type="text" id="shipper" name="shipper" value={formData.shipper} onChange={handleInputChange}/>
+              <label htmlFor="shipper">Người giao :</label>
+              <input
+                type="text"
+                id="shipper"
+                name="shipper"
+                value={formData.shipper}
+                onChange={handleInputChange}
+              />
 
-            <label htmlFor="user">Người nhận :</label>
-            <input type="text" id="user" name="user" value={formData.user} onChange={handleInputChange}/>
+              <label htmlFor="user">Người nhận :</label>
+              <input
+                type="text"
+                id="user"
+                name="user"
+                value={formData.user}
+                onChange={handleInputChange}
+              />
 
-            <label htmlFor="date">Ngày Nhập:</label>
-            <input type="datetime-local" id="date" name="date" value={formData.date} onChange={handleInputChange}/>
+              <label htmlFor="date">Ngày Nhập:</label>
+              <input
+                type="datetime-local"
+                id="date"
+                name="date"
+                value={formData.date}
+                onChange={handleInputChange}
+              />
             </div>
             <div>
               <table className="table-auto w-full mt-4">

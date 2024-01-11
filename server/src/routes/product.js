@@ -98,7 +98,7 @@ router.get(
   [verifyToken, isAdmin],
   controllers.getExportProductsCard
 );
-router.get(
+router.post(
   "/admin/get-all-the-kho",
   [verifyToken, isAdmin],
   controllers.getAllTheKhos

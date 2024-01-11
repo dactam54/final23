@@ -246,15 +246,13 @@ export const apiTheKhoXuat = (pid) =>
     }
   });
 
-
-  // all phieu xuat nhap
-  export const apiGetAllPhieuNhap = () =>
+// all phieu xuat nhap
+export const apiGetAllPhieuNhap = () =>
   new Promise(async (resolve, reject) => {
     try {
       const response = await axios({
         method: "get",
         url: `/api/v1/products/admin/imports-detail-all/`,
-        
       });
       resolve(response);
       console.log("apiGetAllPhieuNhap", response);
@@ -263,13 +261,12 @@ export const apiTheKhoXuat = (pid) =>
     }
   });
 
-  export const apiGetAllPhieuXuat = () =>
+export const apiGetAllPhieuXuat = () =>
   new Promise(async (resolve, reject) => {
     try {
       const response = await axios({
         method: "get",
         url: `/api/v1/products/admin/exports-detail-all/`,
-        
       });
       resolve(response);
       // console.log("apiGetAllPhieuXuat", response);
@@ -309,8 +306,7 @@ export const apiPhieuKhoXuat = (pid) =>
     }
   });
 
-
-  // xuat nhap nhieu 
+// xuat nhap nhieu
 export const apiImportManyProduct = (data, uid) =>
   new Promise(async (resolve, reject) => {
     try {
@@ -341,17 +337,16 @@ export const apiExportManyProduct = (data, uid) =>
 
 // get all the kho
 
-export const apiGetAllTheKhos =({params})=>{
-  return new Promise(async(resolve,reject)=>{
+export const apiGetAllTheKhos = (params) => {
+  return new Promise(async (resolve, reject) => {
     try {
-      const response = await axios({
-        method: "get",
-        url: "/api/v1/products/admin/get-all-the-kho",
+      const response = await axios.post(
+        "/api/v1/products/admin/get-all-the-kho",
         params
-      });
+      );
       resolve(response);
     } catch (error) {
       reject(error);
     }
-  })
-}
+  });
+};
