@@ -293,12 +293,13 @@ export const createProduct = (payload) =>
       const response = await db.Product.create({ ...payload, id: genId() });
       resolve({
         err: response ? 0 : 1,
-        rs: response ? "Created" : "Something went wrong!",
+        rs: response ? "Created" : "Something went wrong product services!",
       });
     } catch (error) {
       reject(error);
     }
   });
+  
 export const getDashboard = ({ days, type, from, to }) =>
   new Promise(async (resolve, reject) => {
     try {

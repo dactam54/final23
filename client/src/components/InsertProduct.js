@@ -32,6 +32,7 @@ const InsertProduct = ({
         ? product.policy
         : product?.policy?.join(". ")
       : "",
+
     overviews: product?.overviews || [],
     // price :product?.price || 0,
     plus: 0,

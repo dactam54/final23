@@ -42,7 +42,7 @@ const columns = [
   },
   {
     field: "supplier",
-    name: "Nhà cung cấp",
+    name: "Nhà sản xuất",
     width: 150,
     editable: true,
   },
