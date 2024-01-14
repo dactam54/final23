@@ -35,7 +35,7 @@ export const updateBrand = async (req, res) => {
     })
     const data = {}
     if (req.body && req.body.name) data.name = req.body.name
-    // if (req.file && req.file.path) data.image = req.file.path
+    if (req.file && req.file.path) data.image = req.file.path
     try {
         const response = await services.updateBrand(bid, data)
         return res.status(200).json(response)

@@ -46,6 +46,7 @@ const BuyOptions = ({ variants, discountNumber, setSku, sku, quantity, pid }) =>
             dispatch({ type: actionTypes.CART, cart: pid })
         }
     }
+    
     return (
         <div className='w-full'>
             <span className='flex items-center justify-between gap-3 mb-4'>

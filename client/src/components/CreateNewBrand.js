@@ -5,7 +5,7 @@ import { getBase64 } from '../utils/fn'
 import { apiCreateBrandByAdmin } from '../apis'
 import { useDispatch } from 'react-redux'
 import actionTypes from '../store/actions/actionTypes'
-
+import { toast } from 'react-toastify'
 const { AiOutlineCloudUpload } = icons
 const CreateNewBrand = ({ setIsCreate, setRender }) => {
     const [payload, setPayload] = useState({
@@ -29,7 +29,10 @@ const CreateNewBrand = ({ setIsCreate, setRender }) => {
         if (rs.err === 0) {
             setIsCreate(false)
             setRender(prev => !prev)
+            toast.success('Thêm nhãn hiệu thành công!')
+
         }
+        
     }
     return (
         <div className='relative flex flex-col items-center'>

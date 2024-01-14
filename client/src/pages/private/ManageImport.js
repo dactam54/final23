@@ -3,7 +3,7 @@ import { apiGetProductsAdmin, apiImportManyProducts } from "../../apis/product";
 import { useDispatch } from "react-redux";
 import actionTypes from "../../store/actions/actionTypes";
 import { toast } from "react-toastify";
-import { CiImport } from "react-icons/ci";
+
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import {
   Box,
@@ -13,6 +13,8 @@ import {
   Modal,
   TextField,
 } from "@mui/material";
+import Loading from "../../components/Loading"
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -30,13 +32,15 @@ const ManageImport = () => {
   const dispatch = useDispatch();
   const [openInsert, setOpenInsert] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+
 
   const fetchProducts = React.useCallback(async () => {
-    dispatch({ type: actionTypes.LOADING, flag: true });
+    setLoading(true);
     const response = await apiGetProductsAdmin({ page: page });
-    dispatch({ type: actionTypes.LOADING, flag: false });
+    setLoading(false);
     if (response.err === 0) setProducts(response.productDatas);
-  }, [dispatch, page]);
+  }, [ page]);
 
   const [formData, setFormData] = useState({
     shipper: "",
@@ -68,7 +72,7 @@ const ManageImport = () => {
     });
 
     if (response?.id) {
-      toast.success("Xuất hàng thành công");
+      toast.success("Nhập hàng thành công");
       setSelectedProducts([]);
       fetchProducts();
     }
@@ -186,8 +190,8 @@ const ManageImport = () => {
           Phiếu nhập
         </Button>
       </div>
-
-      <div className="py-4">
+<div>
+        {loading ? <Loading /> :   <div className="py-4">
         <div>
           {products?.rows?.length > 0 && (
             <DataGrid
@@ -215,7 +219,10 @@ const ManageImport = () => {
             />
           )}
         </div>
-      </div>
+      </div>}
+</div>
+    
+
       <Modal
         open={openInsert}
         onClose={() => setOpenInsert(false)}

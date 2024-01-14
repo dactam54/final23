@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { apiGetAllTheKhos ,apiPhieuKhoNhap ,apiPhieuKhoXuat} from "../../apis";
+import { apiGetAllPhieuXuat,apiGetAllPhieuNhap} from "../../apis";
 import { Box, Modal } from "@mui/material";
 import { useDispatch } from "react-redux";
 import actionTypes from "../../store/actions/actionTypes";
@@ -18,6 +18,8 @@ import { Loading } from "../../components";
 import { formatLocalTime } from "../../utils/fn";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -30,42 +32,42 @@ const style = {
   borderRadius: "10px",
 };
 const columns = [
-  { field: "id", name: "ID", width: 90 },
-  {
-    field: "image",
-    name: "Ảnh sản phẩm",
-    width: 150,
-    editable: true,
-  },
-  { field: "id", name: "Tên sản phẩm", width: 90 },
- 
-  {
-    field: "quantityProduct",
-    name: "Số lượng",
-    width: 150,
-    editable: true,
-  },
-  {
-    field: "createdAt",
-    name: "Loại",
-    width: 150,
-    editable: true,
-  },
-  {
-    field: "createdAt",
-    name: "Ngày",
-    width: 150,
-    editable: true,
-  },
-  {
-    field: "action",
-    name: "Thao tác",
-    width: 110,
-    editable: true,
-  },
-];
-const AllTheKho = () => {
-  const dispatch = useDispatch();
+    
+      { field: "id", name: "ID", width: 90 },
+      { field: "id", name: "Mã phiếu", width: 90 },
+      {
+        field: "maHoaDon",
+        name: "Loại phiếu",
+        width: 150,
+        editable: true,
+      },
+    //   {
+    //     field: "maHoaDon",
+    //     name: "Người nhận",
+    //     width: 150,
+    //     editable: true,
+    //   },
+    //   {
+    //     field: "quantityProduct",
+    //     name: "Người giao",
+    //     width: 150,
+    //     editable: true,
+    //   },
+      {
+        field: "createdAt",
+        name: "Ngày tạo",
+        width: 150,
+        editable: true,
+      },
+      {
+        field: "action",
+        name: "Thao tác",
+        width: 110,
+        editable: true,
+      },
+    ];
+const HistoryAllBill = () => {
+
   const [data, setData] = useState(null);
   const [page, setPage] = useState(0);
   const [rowPerPage, setRowPerPage] = useState(10);
@@ -82,22 +84,40 @@ const AllTheKho = () => {
   };
   const handleClose = () => setOpen(false);
 
-  const handleRender = async (id) => {
-    try {
-      console.log("idmodal", id);
+//   const handleRender = async (id) => {
+//     try {
+//       console.log("idmodal", id);
 
-      const [responsePhieuKhoNhap, responsePhieuKhoXuat] = await Promise.all([
-        apiPhieuKhoNhap(id),
-        apiPhieuKhoXuat(id),
-      ]);
-      const dataTitle = (responsePhieuKhoNhap.hoaDons.map((item)=> typeof(item.hoaDonNhapId) !== Number   )) ? responsePhieuKhoNhap: responsePhieuKhoXuat;
-      console.log("DataModal:", dataTitle);
-      setDataModal(dataTitle);
-      handleOpen();
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
+//       const [responsePhieuKhoNhap, responsePhieuKhoXuat] = await Promise.all([
+//         apiPhieuKhoNhap(id),
+//         apiPhieuKhoXuat(id),
+//       ]);
+//       const dataTitle = (responsePhieuKhoNhap.hoaDons.map((item)=> typeof(item.hoaDonNhapId) !== Number   )) ? responsePhieuKhoNhap: responsePhieuKhoXuat;
+//       console.log("DataModal:", dataTitle);
+//       setDataModal(dataTitle);
+//       handleOpen();
+//     } catch (error) {
+//       console.error("Error fetching data:", error);
+//     }
+//   }
+
+const handleRender = (id) => {
+    
+    data.map((item) => {item.id === id && item.hoaDons.length > 0 && setDataModal(item.hoaDons)})
+    console.log('modal',dataModal)
+   
+    handleOpen();
+  };
+  
+//   const handleChangePage = (event, newpage) => {
+//     setPage(newpage);
+//   };
+
+//   const handleRowsPerPage = (event) => {
+//     setRowPerPage(+event.target.value);
+//     setPage(0);
+//   };
+
 
   const handleChangePage = (event, newpage) => {
     setPage(newpage);
@@ -108,28 +128,42 @@ const AllTheKho = () => {
     setPage(0);
   };
 
-  const fetchData = async () => {
-    setLoading(true);
-    if (!dateRange.startDate || !dateRange.endDate) {
-      const currentDate = new Date();
-      const endDate = currentDate.toISOString().slice(0, 16);
-      const startDate = new Date(currentDate - 30 * 24 * 60 * 60 * 1000)
-        .toISOString()
-        .slice(0, 16);
-      setDateRange({
-        startDate,
-        endDate,
-      });
-    }
-    const response = await apiGetAllTheKhos({
-      startDate: dateRange.startDate,
-      endDate: dateRange.endDate,
-    });
-    setLoading(false);
-    if (response.length > 0) setData(response);
-    console.log("data123",response.map((item) => item)
-    );
-  };
+//   const fetchData = async () => {
+//     setLoading(true);
+//     if (!dateRange.startDate || !dateRange.endDate) {
+//       const currentDate = new Date();
+//       const endDate = currentDate.toISOString().slice(0, 16);
+//       const startDate = new Date(currentDate - 30 * 24 * 60 * 60 * 1000)
+//         .toISOString()
+//         .slice(0, 16);
+//       setDateRange({
+//         startDate,
+//         endDate,
+//       });
+//     }
+//     const response = await apiGetAllTheKhos({
+//       startDate: dateRange.startDate,
+//       endDate: dateRange.endDate,
+//     });
+//     setLoading(false);
+//     if (response.length > 0) setData(response);
+//     console.log("data123",response.map((item) => item)
+//     );
+//   };
+
+const fetchData = async () => { 
+    const response1 = await apiGetAllPhieuXuat();
+    const response2 = await apiGetAllPhieuNhap();
+    const data = [ ...response1,...response2];
+    setData(data);
+    console.log('data', data);
+}
+
+useEffect(() => {
+    fetchData()
+},[])
+
+
 
   const handleStartDateChange = (e) => {
     setDateRange((prev) => ({
@@ -147,26 +181,27 @@ const AllTheKho = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!dateRange.startDate || !dateRange.endDate) {
-      const currentDate = new Date();
-      const endDate = currentDate.toISOString().slice(0, 16);
-      const startDate = new Date(currentDate - 30 * 24 * 60 * 60 * 1000)
-        .toISOString()
-        .slice(0, 16);
-      setDateRange({
-        startDate,
-        endDate,
-      });
-    } else {
-      fetchData({ startDate: dateRange.startDate, endDate: dateRange.endDate });
-    }
-  }, [dateRange.startDate, dateRange.endDate]);
+//   useEffect(() => {
+//     if (!dateRange.startDate || !dateRange.endDate) {
+//       const currentDate = new Date();
+//       const endDate = currentDate.toISOString().slice(0, 16);
+//       const startDate = new Date(currentDate - 30 * 24 * 60 * 60 * 1000)
+//         .toISOString()
+//         .slice(0, 16);
+//       setDateRange({
+//         startDate,
+//         endDate,
+//       });
+//     } else {
+//       fetchData({ startDate: dateRange.startDate, endDate: dateRange.endDate });
+//     }
+//   }, [dateRange.startDate, dateRange.endDate]);
 
   return (
     <div style={{ textAlign: "center" }}>
-      <h3 className="font-bold text-[30px] pb-2 ">Thông tin phiếu nhập</h3>
-      <div>
+      <h3 className="font-bold text-[30px] pb-2 ">Lịch sử</h3>
+
+      {/* <div>
         <label htmlFor="startDate">Chọn ngày bắt đầu:</label>
         <input
           type="datetime-local"
@@ -184,12 +219,11 @@ const AllTheKho = () => {
           value={dateRange.endDate}
           onChange={handleEndDateChange}
         />
-      </div>
+      </div> */}
 
 
       
-      <div style={{display: 'flex', flexDirection:'row', marginRight:'20px'}}>
-
+      {/* <div style={{display: 'flex', flexDirection:'row', marginRight:'20px'}}>
       <button
               type="button"
               onClick={() => navigate("/he-thong/quan-ly-nhap")}
@@ -208,7 +242,7 @@ const AllTheKho = () => {
               className="py-2 px-4 bg-green-600 rounded-md text-white font-semibold flex items-center justify-center gap-2">
               <span>Quản lý hàng hóa</span>
             </button>
-      </div>
+      </div> */}
       
 
       {loading ? (
@@ -237,15 +271,14 @@ const AllTheKho = () => {
                       return (
                         <TableRow hover key={row.id}>
                           <TableCell>{index + 1}</TableCell>
-                          <TableCell>
-                            <img src={row.product.thumb} alt="ảnh sản phẩm" className="h-[50px] object-contain"/>
-                          </TableCell>
-                          <TableCell>{row.product.name}</TableCell>
-                          <TableCell>{row.hoaDon.quantity}</TableCell>
-                          <TableCell> {row.type === "nhap" ? "Nhập hàng" : "Xuất hàng"}</TableCell>
+                          <TableCell>{row.maHoaDon}</TableCell>
+                          <TableCell>{row.hoaDons[0].hoaDonNhapId ? 'Phiếu nhập' :'Phiếu xuất'}</TableCell>
+                          {/* <TableCell>{row.user || 'Chưa có thông tin'}</TableCell>
+                          <TableCell>{row.shipper || 'Chưa có thông tin'}</TableCell> */}
                           <TableCell>{formatLocalTime(row.date)}</TableCell>
+                          
                           <button
-                            onClick={() => handleRender(row.type === 'nhap' ? row.hoaDon.hoaDonNhapId : row.hoaDon.hoaDonXuatId)}
+                             onClick={() => handleRender(row.id)}
                             className="py-2 px-4 mt-4 bg-green-600 rounded-md text-white font-semibold"
                           >
                             Xem chi tiết
@@ -276,17 +309,20 @@ const AllTheKho = () => {
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
             >
+            
               <Box sx={style}>
                 <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
                  Chi tiết phiếu
                 </h1>
-                <div>Người giao : <span>{dataModal.shipper}</span></div>
-                <div>Người nhận : <span>{dataModal.user}</span></div>
-                <div>Ngày : <span> {formatLocalTime(dataModal.date)}</span></div>
-                <div>Mã phiếu : <span> {dataModal.maHoaDon}</span></div>
-                {/* <div>Loại phiếu :({dataModal.hoaDons[0].hoaDonNhapId})</div> */}
 
-                {dataModal.hoaDons && (
+                
+                <div>Người giao :</div>
+                <div>Người nhận : <span></span></div>
+                <div>Ngày : <span></span></div>
+                <div>Mã phiếu : <span> </span></div> 
+                <div>Loại phiếu :<span></span></div> 
+
+                {dataModal && (
                   <>
                   <Paper>
                     <TableContainer sx={{ maxHeight: 800 }}>
@@ -302,13 +338,13 @@ const AllTheKho = () => {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {dataModal.hoaDons?.slice(page * rowPerPage,page * rowPerPage + rowPerPage).map((row,index) => {
+                          {dataModal.slice(page * rowPerPage,page * rowPerPage + rowPerPage).map((row,index) => {
                             return (
                               <TableRow key={row?.id}>
                                     <TableCell>{index + 1 }</TableCell>
-                                    <TableCell>{row?.productId} </TableCell>
+                                    <TableCell>{row?.hoaDonNhapId || row?.hoaDonXuatId} </TableCell>
                                     <TableCell>{row?.id}</TableCell>
-                                    <TableCell>{row?.oldQuantity}</TableCell>
+                                    <TableCell>{row?.productId}</TableCell>
                                     <TableCell>{row?.quantity}</TableCell>
                                     <TableCell>{row?.newQuantity}</TableCell>
                                   </TableRow>
@@ -323,7 +359,7 @@ const AllTheKho = () => {
                         rowsPerPageOptions={[10, 15, 20]}
                         rowsPerPage={rowPerPage}
                         page={page}
-                        count={dataModal.hoaDons.length}
+                        count={dataModal.length}
                         component="div"
                         onPageChange={handleChangePage}
                         onRowsPerPageChange={handleRowsPerPage}
@@ -341,4 +377,4 @@ const AllTheKho = () => {
   );
 };
 
-export default AllTheKho;
+export default HistoryAllBill;

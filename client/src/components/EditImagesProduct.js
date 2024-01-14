@@ -9,7 +9,6 @@ const { AiFillCamera } = icons
 
 const EditImagesProduct = ({ setIsEditImage, isEditImage }) => {
 
-    console.log(setIsEditImage.thumb,isEditImage)
     const [thumb, setThumb] = useState('')
     const [images, setImages] = useState('')
     
@@ -39,9 +38,7 @@ const EditImagesProduct = ({ setIsEditImage, isEditImage }) => {
         if (payload.thumb) formData.append('thumb', payload.thumb)
         for (let i of payload.images)
             formData.append('images', i)
-
         const response = await apiUpdateVariants(isEditImage.id, formData)
-        
         if (response.err === 0) {
             toast.success('Thêm biến thể thành công!')
             setThumb('')
@@ -51,7 +48,7 @@ const EditImagesProduct = ({ setIsEditImage, isEditImage }) => {
                 images: '',
             })
         } else {
-            toast.error('Something went wrong!')
+            toast.error('Thêm biến thể thất bại!')
         }
     }
     return (

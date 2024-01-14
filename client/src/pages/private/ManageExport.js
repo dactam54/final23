@@ -13,6 +13,7 @@ import {
   Modal,
   TextField,
 } from "@mui/material";
+import Loading from "../../components/Loading";
 const style = {
   position: "absolute",
   top: "50%",
@@ -28,16 +29,16 @@ const ManageExport = () => {
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
-
+const[loading,setLoading]=useState(false)
   const [openInsert, setOpenInsert] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState([]);
 
   const fetchProducts = React.useCallback(async () => {
-    dispatch({ type: actionTypes.LOADING, flag: true });
+    setLoading(true)
     const response = await apiGetProductsAdmin({ page: page });
-    dispatch({ type: actionTypes.LOADING, flag: false });
+    setLoading(false)
     if (response.err === 0) setProducts(response.productDatas);
-  }, [dispatch, page]);
+  }, [ page]);
 
   const [formData, setFormData] = useState({
     shipper: "",
@@ -67,15 +68,15 @@ const ManageExport = () => {
 
     console.log("response", response, formData);
 
-    // if (response?.id) {
-    //   toast.success("Xuất hàng thành công");
-    //   setSelectedProducts([]);
-    //   fetchProducts();
-    // }
+    if (response?.id) {
+      toast.success("Xuất hàng thành công");
+      setSelectedProducts([]);
+      fetchProducts();
+    }
   };
 
   console.log("selectedProducts", selectedProducts);
-  React.useEffect(() => {
+  useEffect(() => {
     fetchProducts();
   }, [page, fetchProducts]);
 
@@ -188,7 +189,9 @@ const ManageExport = () => {
         </Button>
       </div>
 
-      <div className="py-4">
+
+{
+    loading ? <Loading /> :( <div className="py-4">
         <div>
           {products?.rows?.length > 0 && (
             <DataGrid
@@ -216,7 +219,9 @@ const ManageExport = () => {
             />
           )}
         </div>
-      </div>
+      </div>)
+}
+     
       <Modal
         open={openInsert}
         onClose={() => setOpenInsert(false)}

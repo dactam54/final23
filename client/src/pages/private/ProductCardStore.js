@@ -19,7 +19,8 @@ import {
   TableRow,
 } from "@mui/material";
 import * as XLSX from "xlsx";
-
+import { Loading } from "../../components";
+import { set } from "date-fns";
 const columns = [
   { field: "id", name: "ID", width: 90 },
   {
@@ -80,12 +81,11 @@ const ProductCardStore = () => {
   const [rowPerPage, setRowPerPage] = useState(10);
   const [page1, setPage1] = useState(0);
   const [rowPerPage1, setRowPerPage1] = useState(10);
-
   const [page2, setPage2] = useState(0);
   const [rowPerPage2, setRowPerPage2] = useState(10);
-
   const [open, setOpen] = useState(false);
   const [dataModal, setDataModal] = useState([]);
+  const [loading, setLoading] = useState(false);
   const handleOpen = () => {
     setOpen(true);
   };
@@ -102,17 +102,17 @@ const ProductCardStore = () => {
   const [id, setId] = useState("");
 
   const fetchProducts = async () => {
-    dispatch({ type: actionTypes.LOADING, flag: true });
+    setLoading(true);
     const response = await apiGetProductsAdmin({ page: page });
-    dispatch({ type: actionTypes.LOADING, flag: false });
+    setLoading(false);
     if (response.err === 0) setData(response.productDatas);
     console.log("response123", response);
   };
 
   const fetchTheKhoNhap = async (id) => {
-    dispatch({ type: actionTypes.LOADING, flag: true });
+    setLoading(true);
     const response = await apiTheKhoNhap(id);
-    dispatch({ type: actionTypes.LOADING, flag: false });
+    setLoading(false);
     if (response.length > 0) {
       setDataModal(response);
       setId(1);
@@ -123,9 +123,9 @@ const ProductCardStore = () => {
   };
   
   const fetchTheKhoXuat = async (id) => {
-    dispatch({ type: actionTypes.LOADING, flag: true });
+    setLoading(true);
     const response = await apiTheKhoXuat(id);
-    dispatch({ type: actionTypes.LOADING, flag: false });
+    setLoading(false);
     if (response.length > 0) {
       setDataModal1(response);
       console.log("12345", response);
@@ -185,7 +185,8 @@ console.log("searchKeyword", searchKeyword);
                 className='bg-white text-gray-700 rounded-md py-2 px-4 w-full'
                 placeholder='Tìm kiếm hóa đơn'
                 onChange={e => setSearchKeyword(e.target.value)} />
-      <Paper sx={{ width: "100%" }}>
+
+      {loading ? <Loading /> :  <Paper sx={{ width: "100%" }}>
         <TableContainer sx={{ maxHeight: 850 }}>
           <Table stickyHeader>
             <TableHead>
@@ -250,7 +251,8 @@ console.log("searchKeyword", searchKeyword);
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleRowsPerPage}
         ></TablePagination>
-      </Paper>
+      </Paper>}  
+     
 
       {id === 1
         ? (dataModal && (

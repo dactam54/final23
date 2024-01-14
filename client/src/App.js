@@ -18,6 +18,7 @@ import {
   PDF,
   ProductCardStore,
   AllTheKho,
+  HistoryAllBill,
 } from "./pages/private";
 
 
@@ -43,8 +44,6 @@ function App() {
           <Route path={path.STATISTICS} element={<Statistics />} />
           <Route path={path.PRODUCT_CARD_STORE} element={<ProductCardStore />} />
           <Route path={path.MANAGE_BRAND} element={<ManageBrand />} />
-          
-         
           <Route path={path.MANAGE_PRODUCT} element={<ManageProduct />} />
           <Route path={path.MANAGE_IMPORT} element={<ManageImport />} />
           <Route path={path.MANAGE_EXPORT} element={<ManageExport />} />
@@ -52,6 +51,7 @@ function App() {
           <Route path={path.MANAGE_Bill_IMPORT} element={<ManageImportBill />}/>
           <Route path={path.MANAGE_USER} element={<ManageUser />} />
           <Route path={path.ALL_THE_KHO} element={<AllTheKho />} />
+          <Route path={path.HISTORY_ALL_BILL} element={<HistoryAllBill />} />
           <Route path={"*"} element={<Statistics />} />
           
         </Route>

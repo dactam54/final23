@@ -22,7 +22,7 @@ export const createBrand = (data) => new Promise(async (resolve, reject) => {
         })
         resolve({
             err: response[1] ? 0 : 1,
-            mes: response[1] ? 'Created' : 'Something went wrong!',
+            mes: response[1] ? 'Thêm mới thành công' : 'Thêm mới không thành công',
             createdBrand: response[1] ? response[0] : null
         })
 
@@ -35,7 +35,7 @@ export const updateBrand = (bid, data) => new Promise(async (resolve, reject) =>
         const response = await db.Brand.update(data, { where: { id: bid } })
         resolve({
             err: response[0] > 0 ? 0 : 1,
-            mes: response[0] > 0 ? 'Updated' : 'Something went wrong!',
+            mes: response[0] > 0 ? 'Cập nhật thành công' : 'Cập nhật không thành công',
         })
 
     } catch (error) {
@@ -47,7 +47,7 @@ export const deleteBrand = (bids) => new Promise(async (resolve, reject) => {
         const response = await db.Brand.destroy({ where: { id: bids } })
         resolve({
             err: response > 0 ? 0 : 1,
-            mes: response > 0 ? 'Deteled' : 'Something went wrong!',
+            mes: response > 0 ? 'Xóa thành công ' : 'Xóa không thành công',
         })
 
     } catch (error) {

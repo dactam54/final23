@@ -30,23 +30,23 @@ export const adminSidebar = [
     path: path.SYSTEM + "/" + path.MANAGE_PRODUCT,
   },
   {
-    name: "Quản lý nhập",
+    name: "Tạo phiếu nhập ",
     icons: <FaProductHunt size={22} />,
     path: path.SYSTEM + "/" + path.MANAGE_IMPORT,
   },
   {
-    name: "Quản lý xuất ",
+    name: "Tạo phiếu xuất ",
     icons: <FaProductHunt size={22} />,
     path: path.SYSTEM + "/" + path.MANAGE_EXPORT,
   },
   {
-    name: "Phiếu nhập",
+    name: "Lịch sử nhập",
     icons: <RiBillLine size={22} />,
     path: path.SYSTEM + "/" + path.MANAGE_Bill_IMPORT,
   },
 
   {
-    name: "Phiếu xuất",
+    name: "Lịch sử xuất",
     icons: <RiBillLine size={22} />,
     path: path.SYSTEM + "/" + path.MANAGE_Bill_EXPORT,
   },
@@ -55,6 +55,12 @@ export const adminSidebar = [
     name: "Thẻ kho",
     icons: <RiBillLine size={22} />,
     path: path.SYSTEM + "/" + path.ALL_THE_KHO,
+  },
+
+  {
+    name: "Lịch sử phiếu",
+    icons: <RiBillLine size={22} />,
+    path: path.SYSTEM + "/" + path.HISTORY_ALL_BILL,
   },
   // {
   //   name: "Báo cáo",

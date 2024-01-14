@@ -87,3 +87,16 @@ export const getMonthsInRange = (start, end) => {
     months += d2.getMonth();
     return months <= 0 ? 0 : months
 }
+export const formatLocalTime =(timestamp) => {
+    const localTime = new Date(timestamp).toLocaleString("vi-VN", {
+        day: "numeric",
+        month: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        timeZoneName: "short",
+      });
+    
+      return localTime;
+}

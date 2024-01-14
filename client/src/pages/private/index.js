@@ -11,6 +11,7 @@ export { default as ManageImportBill } from './ManageImportBill'
 export { default as PDF } from './PDF'
 export { default as ProductCardStore } from './ProductCardStore'
 export { default as AllTheKho } from './AllTheKho'
+export { default as HistoryAllBill } from './HistoryAllBill'
 
 
 // export { default as ProductAdmin } from './ProductAdmin'

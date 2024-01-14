@@ -51,20 +51,8 @@ const InsertProduct = ({
   });
 
   const handleUpdateProduct = async () => {
-    // tăng số lượng 1 sản phẩm
     if (isImport) {
-      // const data = {
-      //   quantity :Number(payload.quantity) + Number(payload.plus),
-      //   preQuantity: payload.quantity,
-      //   // price: payload.price,
-      //   // total:(Number(payload.quantity) + Number(payload.plus))* payload.price,
-      //   type: "Import",
-      // }
-      // const response = await apiImportProduct(product.id, data);
-      // if (response.err === 0) {
-      //   toast.success("Cập nhật thành công!!!");
-      //   setIsEdit(false);
-      // }
+  
     } else if (setIsEdit) {
       const response = await apiUpdateProduct(product.id, {
         ...payload,

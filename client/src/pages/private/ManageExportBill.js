@@ -83,6 +83,8 @@ const ManageExportBill = () => {
     console.log('DataModal', response);
     console.log('fetchData', response);
   };
+
+  
   const handleRender = (id) => {
     data.map((item) => {item.id === id && item.hoaDons.length > 0 && setDataModal(item.hoaDons)})
     console.log(dataModal)
