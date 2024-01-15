@@ -39,17 +39,17 @@ export const adminSidebar = [
     icons: <FaProductHunt size={22} />,
     path: path.SYSTEM + "/" + path.MANAGE_EXPORT,
   },
-  {
-    name: "Lịch sử nhập",
-    icons: <RiBillLine size={22} />,
-    path: path.SYSTEM + "/" + path.MANAGE_Bill_IMPORT,
-  },
+  // {
+  //   name: "Lịch sử nhập",
+  //   icons: <RiBillLine size={22} />,
+  //   path: path.SYSTEM + "/" + path.MANAGE_Bill_IMPORT,
+  // },
 
-  {
-    name: "Lịch sử xuất",
-    icons: <RiBillLine size={22} />,
-    path: path.SYSTEM + "/" + path.MANAGE_Bill_EXPORT,
-  },
+  // {
+  //   name: "Lịch sử xuất",
+  //   icons: <RiBillLine size={22} />,
+  //   path: path.SYSTEM + "/" + path.MANAGE_Bill_EXPORT,
+  // },
 
   {
     name: "Thẻ kho",
@@ -61,6 +61,13 @@ export const adminSidebar = [
     name: "Lịch sử phiếu",
     icons: <RiBillLine size={22} />,
     path: path.SYSTEM + "/" + path.HISTORY_ALL_BILL,
+  },
+
+  
+  {
+    name: "Tất cả sản phẩm",
+    icons: <RiBillLine size={22} />,
+    path: path.SYSTEM + "/" + path.PRODUCT_ALL,
   },
   // {
   //   name: "Báo cáo",

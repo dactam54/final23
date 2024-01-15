@@ -15,6 +15,7 @@ const ManageProduct = () => {
   const [isCreate, setIsCreate] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [update, setUpdate] = useState(false);
+  
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
 

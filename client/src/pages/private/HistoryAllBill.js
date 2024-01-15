@@ -41,18 +41,18 @@ const columns = [
         width: 150,
         editable: true,
       },
-    //   {
-    //     field: "maHoaDon",
-    //     name: "Người nhận",
-    //     width: 150,
-    //     editable: true,
-    //   },
-    //   {
-    //     field: "quantityProduct",
-    //     name: "Người giao",
-    //     width: 150,
-    //     editable: true,
-    //   },
+      {
+        field: "quantityProduct",
+        name: "Người giao",
+        width: 150,
+        editable: true,
+      },
+      {
+        field: "quantityProduct",
+        name: "Người nhận",
+        width: 150,
+        editable: true,
+      },
       {
         field: "createdAt",
         name: "Ngày tạo",
@@ -79,6 +79,9 @@ const HistoryAllBill = () => {
     endDate: "",
   });
 
+  console.log('dateRange',dateRange)
+  const [keySearch, setKeySearch] = useState("");
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -102,10 +105,12 @@ const HistoryAllBill = () => {
 //   }
 
 const handleRender = (id) => {
-    
-    data.map((item) => {item.id === id && item.hoaDons.length > 0 && setDataModal(item.hoaDons)})
+    console.log('id',id)
+    // data.map((item) => {item.id === id && item.hoaDons.length > 0 && setDataModal(item.hoaDons)})
+    // console.log('modal',dataModal)
+    // console.log('modal1',dataModal1?.user)
+    data.map((item)=> {item.id === id && setDataModal(item.hoaDons)})
     console.log('modal',dataModal)
-   
     handleOpen();
   };
   
@@ -152,16 +157,34 @@ const handleRender = (id) => {
 //   };
 
 const fetchData = async () => { 
+    setLoading(true);
     const response1 = await apiGetAllPhieuXuat();
     const response2 = await apiGetAllPhieuNhap();
+    setLoading(false);  
     const data = [ ...response1,...response2];
-    setData(data);
-    console.log('data', data);
+    console.log('data',data)
+
+    if (dateRange.startDate || dateRange.endDate) {
+      const start = new Date(dateRange.startDate);
+      const end = new Date(dateRange.endDate) || new Date();
+      const filterDate = data.filter((item) => {
+        const itemDate = new Date(item.date);
+        return itemDate >= start || itemDate <= end;
+      });
+      setData(filterDate);
+    } else if (keySearch) {
+      const filteredSearch = data.filter((item) => {
+        return item.maHoaDon.toLowerCase().includes(keySearch.toLowerCase());
+      });
+      setData(filteredSearch);
+    }else{
+      setData(data);
+    }
 }
 
 useEffect(() => {
     fetchData()
-},[])
+},[dateRange.startDate,dateRange.endDate,keySearch])
 
 
 
@@ -197,10 +220,38 @@ useEffect(() => {
 //     }
 //   }, [dateRange.startDate, dateRange.endDate]);
 
+
+
   return (
     <div style={{ textAlign: "center" }}>
       <h3 className="font-bold text-[30px] pb-2 ">Lịch sử</h3>
+      <input
+          type="text"
+          className="bg-white text-gray-700 rounded-md py-2 px-4 w-full"
+          placeholder="Tìm kiếm nhãn hiệu"
+          onChange={(e) => setKeySearch(e.target.value)}
+        />
+         <div>
+        <label htmlFor="startDate">Chọn ngày bắt đầu:</label>
+        <input
+          type="datetime-local"
+          id="startDate"
+          name="startDate"
+          value={dateRange.startDate}
+          onChange={handleStartDateChange}
+        />
 
+        <label htmlFor="endDate">Chọn ngày kết thúc:</label>
+        <input
+          type="datetime-local"
+          id="endDate"
+          name="endDate"
+          value={dateRange.endDate}
+          onChange={handleEndDateChange}
+        />
+        
+      </div>
+     
       {/* <div>
         <label htmlFor="startDate">Chọn ngày bắt đầu:</label>
         <input
@@ -244,7 +295,6 @@ useEffect(() => {
             </button>
       </div> */}
       
-
       {loading ? (
         <Loading />
       ) : (
@@ -273,10 +323,13 @@ useEffect(() => {
                           <TableCell>{index + 1}</TableCell>
                           <TableCell>{row.maHoaDon}</TableCell>
                           <TableCell>{row.hoaDons[0].hoaDonNhapId ? 'Phiếu nhập' :'Phiếu xuất'}</TableCell>
-                          {/* <TableCell>{row.user || 'Chưa có thông tin'}</TableCell>
-                          <TableCell>{row.shipper || 'Chưa có thông tin'}</TableCell> */}
+                          <TableCell>
+                            {row?.hoaDons[0].hoaDonNhapId ? row?.shipper : row?.user }
+                          </TableCell>
+                          <TableCell>
+                            {row?.hoaDons[0].hoaDonNhapId ? row?.user :  row?.shipper}
+                          </TableCell>
                           <TableCell>{formatLocalTime(row.date)}</TableCell>
-                          
                           <button
                              onClick={() => handleRender(row.id)}
                             className="py-2 px-4 mt-4 bg-green-600 rounded-md text-white font-semibold"
@@ -302,7 +355,7 @@ useEffect(() => {
         </Paper>
       )}
 
-       {dataModal && (
+       {dataModal && ( 
             <Modal
               open={open}
               onClose={handleClose}
@@ -314,14 +367,6 @@ useEffect(() => {
                 <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
                  Chi tiết phiếu
                 </h1>
-
-                
-                <div>Người giao :</div>
-                <div>Người nhận : <span></span></div>
-                <div>Ngày : <span></span></div>
-                <div>Mã phiếu : <span> </span></div> 
-                <div>Loại phiếu :<span></span></div> 
-
                 {dataModal && (
                   <>
                   <Paper>
@@ -330,11 +375,10 @@ useEffect(() => {
                         <TableHead>
                           <TableRow>
                             <TableCell>STT</TableCell>
+                            <TableCell>Ảnh</TableCell>
+                            <TableCell>Tên sản phẩm </TableCell>
                             <TableCell>Mã sản phẩm</TableCell>
-                            <TableCell>Mã thẻ</TableCell>
-                            <TableCell>SL trước nhập</TableCell>
-                            <TableCell>SL nhập</TableCell>
-                            <TableCell>SL sau nhập</TableCell> 
+                            <TableCell>Số lượng</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
@@ -342,11 +386,12 @@ useEffect(() => {
                             return (
                               <TableRow key={row?.id}>
                                     <TableCell>{index + 1 }</TableCell>
-                                    <TableCell>{row?.hoaDonNhapId || row?.hoaDonXuatId} </TableCell>
-                                    <TableCell>{row?.id}</TableCell>
+                                    <TableCell>
+                                    <img src={row.product.thumb} alt="ảnh sản phẩm" className="h-[50px] object-contain"/>
+                                    </TableCell>
+                                    <TableCell>{row?.product?.name}</TableCell>
                                     <TableCell>{row?.productId}</TableCell>
                                     <TableCell>{row?.quantity}</TableCell>
-                                    <TableCell>{row?.newQuantity}</TableCell>
                                   </TableRow>
                             )
                               })
@@ -356,7 +401,7 @@ useEffect(() => {
                     </TableContainer>
                     <div>
                       <TablePagination
-                        rowsPerPageOptions={[10, 15, 20]}
+                        rowsPerPageOptions={[ 10, 15,20]}
                         rowsPerPage={rowPerPage}
                         page={page}
                         count={dataModal.length}

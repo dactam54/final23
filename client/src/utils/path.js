@@ -15,6 +15,7 @@ const path = {
     ALL_THE_KHO: 'the-kho',
     PDF: 'bao-cao',
     HISTORY_ALL_BILL: 'lich-su-phieu',
+    PRODUCT_ALL: 'hang-hoa',
     
 }
 

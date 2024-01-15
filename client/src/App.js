@@ -23,6 +23,7 @@ import {
 
 
 import { ToastContainer } from "react-toastify";
+import ProductAll from "./pages/private/ProductAll";
 function App() {
   const dispatch = useDispatch()
   useEffect(() => {
@@ -47,11 +48,12 @@ function App() {
           <Route path={path.MANAGE_PRODUCT} element={<ManageProduct />} />
           <Route path={path.MANAGE_IMPORT} element={<ManageImport />} />
           <Route path={path.MANAGE_EXPORT} element={<ManageExport />} />
-          <Route path={path.MANAGE_Bill_EXPORT} element={<ManageExportBill />}/>
-          <Route path={path.MANAGE_Bill_IMPORT} element={<ManageImportBill />}/>
+          {/* <Route path={path.MANAGE_Bill_EXPORT} element={<ManageExportBill />}/>
+          <Route path={path.MANAGE_Bill_IMPORT} element={<ManageImportBill />}/> */}
           <Route path={path.MANAGE_USER} element={<ManageUser />} />
           <Route path={path.ALL_THE_KHO} element={<AllTheKho />} />
           <Route path={path.HISTORY_ALL_BILL} element={<HistoryAllBill />} />
+          <Route path={path.PRODUCT_ALL} element={<ProductAll />} />
           <Route path={"*"} element={<Statistics />} />
           
         </Route>
