@@ -87,27 +87,60 @@ const ProductAll = () => {
     startDate: "",
     endDate: "",
   });
-
-  console.log("dateRange", dateRange);
   const [keySearch, setKeySearch] = useState("");
 
+
+  const [modalRaw, setModalRaw] = useState([]);
   const handleOpen = () => {
     setOpen(true);
   };
   const handleClose = () => setOpen(false);
 
+  // const currentDate = new Date();
+      // const endDate = currentDate.toISOString().slice(0, 16);
+      // const startDate = new Date(currentDate - 30 * 24 * 60 * 60 * 1000)
+      //   .toISOString()
+      //   .slice(0, 16);
+  
+      // setDateRange({
+      //   startDate,
+      //   endDate,
+      // });
+
+  const fetchDataModal = async () => {
+    try {
+      setLoading(true);
+      const response = await apiGetAllTheKhos({
+        startDate: '2024-01-08',  
+        endDate: '2024-01-20'
+      });
+      setLoading(false);
+      if (response.length > 0) {
+        setModalRaw(response);
+      }
+      console.log("modalRaw", modalRaw);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchDataModal()
+  }, []);
+
   const handleRender = (id) => {
-    console.log("id", id);
-    // data.map((item) => {item.id === id && item.hoaDons.length > 0 && setDataModal(item.hoaDons)})
-    // console.log('modal',dataModal)
-    // console.log('modal1',dataModal1?.user)
-    data.map((item) => {
-      item.id === id && setDataModal(item.hoaDons);
-    });
-    console.log("modal", dataModal);
+  
+    const filteredData = modalRaw.filter(item => item.productId === id);
+    console.log("filteredData", filteredData);
+    if (filteredData.length > 0) {
+    setDataModal(filteredData);
+    console.log("dataModal", dataModal);
+    handleOpen();
+  } else {
+    console.log("No items found with id:", id);
+  }
     handleOpen();
   };
-
   const handleChangePage = (event, newpage) => {
     setPage(newpage);
   };
@@ -117,102 +150,25 @@ const ProductAll = () => {
     setPage(0);
   };
 
-  //   const fetchData = async () => {
-  //     setLoading(true);
-  //     if (!dateRange.startDate || !dateRange.endDate) {
-  //       const currentDate = new Date();
-  //       const endDate = currentDate.toISOString().slice(0, 16);
-  //       const startDate = new Date(currentDate - 30 * 24 * 60 * 60 * 1000)
-  //         .toISOString()
-  //         .slice(0, 16);
-  //       setDateRange({
-  //         startDate,
-  //         endDate,
-  //       });
-  //     }
-  //     const response = await apiGetAllTheKhos({
-  //       startDate: dateRange.startDate,
-  //       endDate: dateRange.endDate,
-  //     });
-  //     setLoading(false);
-  //     if (response.length > 0) setData(response);
-  //     console.log("data123",response.map((item) => item)
-  //     );
-  //   };
-
-  // const fetchData = async () => {
-  //     setLoading(true);
-  //     const response1 = await apiGetAllPhieuXuat();
-  //     const response2 = await apiGetAllPhieuNhap();
-  //     setLoading(false);
-  //     const data = [ ...response1,...response2];
-  //     console.log('data',data)
-
-  //     if (dateRange.startDate || dateRange.endDate) {
-  //       const start = new Date(dateRange.startDate);
-  //       const end = new Date(dateRange.endDate) || new Date();
-  //       const filterDate = data.filter((item) => {
-  //         const itemDate = new Date(item.date);
-  //         return itemDate >= start || itemDate <= end;
-  //       });
-  //       setData(filterDate);
-  //     } else if (keySearch) {
-  //       const filteredSearch = data.filter((item) => {
-  //         return item.maHoaDon.toLowerCase().includes(keySearch.toLowerCase());
-  //       });
-  //       setData(filteredSearch);
-  //     }else{
-  //       setData(data);
-  //     }
-  // }
-
-  // useEffect(() => {
-  //     fetchData()
-  // },[dateRange.startDate,dateRange.endDate,keySearch])
-
-  const fetchDataTheKho = async () => {
-    setLoading(true);
-    if (!dateRange.startDate || !dateRange.endDate) {
-      const currentDate = new Date();
-      const endDate = currentDate.toISOString().slice(0, 16);
-      const startDate = new Date(currentDate - 30 * 24 * 60 * 60 * 1000)
-        .toISOString()
-        .slice(0, 16);
-      setDateRange({
-        startDate,
-        endDate,
-      });
-    }
-    const response = await apiGetAllTheKhos({
-      startDate: dateRange.startDate,
-      endDate: dateRange.endDate,
-    });
-    setLoading(false);
-    if (response.length > 0) setData(response);
-    console.log(
-      "data12345",
-      response.map((item) => item)
-    );
-  };
-
-  useEffect(() => { fetchDataTheKho()},[dateRange.startDate,dateRange.endDate])
-
   const fetchData = async () => {
     setLoading(true);
     const response = await apiGetProductsAdmin({ page: page });
     setLoading(false);
     const resData = response.productDatas;
     if (keySearch) {
+      setLoading(true);
       const filteredSearch = resData.rows.filter((item) => {
-        return item.name.toLowerCase().includes(keySearch.toLowerCase());
+        return item.name.toLowerCase().includes(keySearch.toLowerCase()) || item.brand.toLowerCase().includes(keySearch.toLowerCase()) || item.catalog.toLowerCase().includes(keySearch.toLowerCase());
       });
       console.log("filteredSearch", filteredSearch);
+      setLoading(false);
       setData1(filteredSearch);
     } else {
       setData(resData);
     }
     console.log("response123", data);
   };
+
   useEffect(() => {
     fetchData();
   }, [page, keySearch]);
@@ -235,7 +191,7 @@ const ProductAll = () => {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <h3 className="font-bold text-[30px] pb-2 ">Lịch sử</h3>
+      <h3 className="font-bold text-[30px] pb-2 ">Quản lý hàng hóa</h3>
       <input
         type="text"
         className="bg-white text-gray-700 rounded-md py-2 px-4 w-full"
@@ -352,71 +308,74 @@ const ProductAll = () => {
       )}
 
       {dataModal && (
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
-              Chi tiết phiếu
-            </h1>
-            <label htmlFor="startDate">Chọn ngày bắt đầu:</label>
-            <input
-              type="datetime-local"
-              id="startDate"
-              name="startDate"
-              value={dateRange.startDate}
-              onChange={handleStartDateChange}
-            />
+            <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style}>
+                <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
+                 Thẻ kho
+                </h1>
+                <div>Ngày lập thẻ :   
+                </div>
+                <div>Tên sản phẩm :
+                <span>{dataModal[0]?.product?.name}</span>  
+                </div>
+                <div>Ngày : 
+                <span>
+                     {formatLocalTime(new Date().toISOString())}
+                </span>
+                </div>
+                <div>Mã phiếu :
+                 {/* <span> {dataModal.maHoaDon}</span> */}
+                 </div>
+                {/* <div>Loại phiếu :({dataModal.hoaDons[0].hoaDonNhapId})</div> */}
 
-            <label htmlFor="endDate">Chọn ngày kết thúc:</label>
-            <input
-              type="datetime-local"
-              id="endDate"
-              name="endDate"
-              value={dateRange.endDate}
-              onChange={handleEndDateChange}
-            />
-            <div>Data</div>
-            {/* {dataModal && (
+                {dataModal && (
               <>
                 <Paper>
-                  <TableContainer sx={{ maxHeight: 800 }}>
+                  <TableContainer sx={{ maxHeight: 600 }}>
                     <Table stickyHeader>
                       <TableHead>
                         <TableRow>
-                          <TableCell>STT</TableCell>
-                          <TableCell>Ảnh</TableCell>
-                          <TableCell>Tên sản phẩm </TableCell>
-                          <TableCell>Mã sản phẩm</TableCell>
-                          <TableCell>Số lượng</TableCell>
+                          <TableCell rowSpan={2} style={{ border: '1px solid #ddd' ,width :'50px'}}>STT</TableCell>
+                          <TableCell rowSpan={2} style={{ border: '1px solid #ddd' ,width :'150px'}}>Ngày</TableCell> 
+                          <TableCell rowSpan={2} style={{ border: '1px solid #ddd' ,width :'150px'}}>Mã chứng từ</TableCell>
+                          <TableCell colSpan={2} style={{ border: '1px solid #ddd',width :'70px' }}>Loại chứng từ</TableCell>
+                          {/* <TableCell rowSpan={2} style={{ border: '1px solid #ddd' }}>Ngày </TableCell> */}
+                          <TableCell colSpan={3} style={{ border: '1px solid #ddd' }}>Số lượng </TableCell>
+                          <TableCell rowSpan={2} style={{ border: '1px solid #ddd' }}>Mã hóa đơn</TableCell>
+
+                        </TableRow>
+                        <TableRow>
+                          <TableCell style={{ border: '1px solid #ddd',width :'10%' }}>Nhập </TableCell>
+                          <TableCell style={{ border: '1px solid #ddd' ,width :'10%'}}>Xuất</TableCell>
+
+                          <TableCell style={{ border: '1px solid #ddd' }}>Nhập</TableCell>
+                          <TableCell style={{ border: '1px solid #ddd' }}>Xuất</TableCell>
+                          <TableCell style={{ border: '1px solid #ddd' }}>Tồn</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {dataModal
-                          .slice(
-                            page * rowPerPage,
-                            page * rowPerPage + rowPerPage
-                          )
+                        {dataModal 
+                          .slice( page * rowPerPage,page * rowPerPage + rowPerPage)
                           .map((row, index) => {
                             return (
                               <TableRow key={row?.id}>
-                                <TableCell>{index + 1}</TableCell>
-                                <TableCell>
-                                  <img
-                                    src={row.product.thumb}
-                                    alt="ảnh sản phẩm"
-                                    className="h-[50px] object-contain"
-                                  />
-                                </TableCell>
-                                <TableCell>{row?.product?.name}</TableCell>
-                                <TableCell>{row?.productId}</TableCell>
-                                <TableCell>{row?.quantity}</TableCell>
+                                <TableCell style={{ border: '1px solid #ddd'}}>{index + 1}</TableCell>
+                                <TableCell style={{ border: '1px solid #ddd'}}>{formatLocalTime(row.date)}</TableCell>
+                                <TableCell style={{ border: '1px solid #ddd'}}>{row?.hoaDon?.maHoaDon}</TableCell>
+                                <TableCell style={{ border: '1px solid #ddd',textAlign: 'center'}}>{row?.hoaDon?.hoaDonNhapId ? 'X' : ''}</TableCell>
+                                <TableCell style={{ border: '1px solid #ddd',textAlign: 'center'}}>{row?.hoaDon?.hoaDonXuatId ? 'X' : ''}</TableCell>
+                                <TableCell style={{ border: '1px solid #ddd',textAlign: 'center'}}>{row?.hoaDon?.hoaDonNhapId  ? row?.hoaDon?.quantity : ''}</TableCell>
+                                <TableCell style={{ border: '1px solid #ddd',textAlign: 'center' }}>{row?.hoaDon?.hoaDonXuatId  ? row?.hoaDon?.quantity : ''}</TableCell>
+                                <TableCell style={{ border: '1px solid #ddd',textAlign: 'center'}}>{row?.product?.quantity}</TableCell>
+                                <TableCell style={{ border: '1px solid #ddd'}}>{`HD${row?.hoaDonId}`}</TableCell>
                               </TableRow>
                             );
-                          })}
+                          }) }
                       </TableBody>
                     </Table>
                   </TableContainer>
@@ -433,10 +392,11 @@ const ProductAll = () => {
                   </div>
                 </Paper>
               </>
-            )} */}
-          </Box>
-        </Modal>
-      )}
+            ) }
+              </Box>
+
+            </Modal>)
+     } 
     </div>
   );
 };

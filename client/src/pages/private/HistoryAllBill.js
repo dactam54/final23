@@ -162,19 +162,29 @@ const fetchData = async () => {
     const response2 = await apiGetAllPhieuNhap();
     setLoading(false);  
     const data = [ ...response1,...response2];
-    console.log('data',data)
-
     if (dateRange.startDate || dateRange.endDate) {
-      const start = new Date(dateRange.startDate);
-      const end = new Date(dateRange.endDate) || new Date();
+      let end = dateRange.endDate ? new Date(dateRange.endDate) : new Date();
+      let start =dateRange.startDate ? new Date(dateRange.startDate) :new Date(end - 30 * 24 * 60 * 60 * 1000);
+
+      console.log('newDate',start,end)
       const filterDate = data.filter((item) => {
         const itemDate = new Date(item.date);
-        return itemDate >= start || itemDate <= end;
+        return itemDate >= start && itemDate <= end;
       });
       setData(filterDate);
     } else if (keySearch) {
       const filteredSearch = data.filter((item) => {
-        return item.maHoaDon.toLowerCase().includes(keySearch.toLowerCase());
+        if (item.hoaDons[0].hoaDonNhapId && !isNaN(item.hoaDons[0].hoaDonNhapId)) {
+          if (parseInt(item.hoaDons[0].hoaDonNhapId) > 0) {
+            
+            return "Phiếu nhập".toLowerCase().includes(keySearch.toLowerCase());
+          } else {
+            
+            return "Phiếu xuất".toLowerCase().includes(keySearch.toLowerCase());
+          }
+        } else {
+          return item.maHoaDon.toLowerCase().includes(keySearch.toLowerCase()) || item.user.toLowerCase().includes(keySearch.toLowerCase()) || item.shipper.toLowerCase().includes(keySearch.toLowerCase());
+        }
       });
       setData(filteredSearch);
     }else{
@@ -185,8 +195,6 @@ const fetchData = async () => {
 useEffect(() => {
     fetchData()
 },[dateRange.startDate,dateRange.endDate,keySearch])
-
-
 
   const handleStartDateChange = (e) => {
     setDateRange((prev) => ({
@@ -204,35 +212,20 @@ useEffect(() => {
 
   const navigate = useNavigate();
 
-//   useEffect(() => {
-//     if (!dateRange.startDate || !dateRange.endDate) {
-//       const currentDate = new Date();
-//       const endDate = currentDate.toISOString().slice(0, 16);
-//       const startDate = new Date(currentDate - 30 * 24 * 60 * 60 * 1000)
-//         .toISOString()
-//         .slice(0, 16);
-//       setDateRange({
-//         startDate,
-//         endDate,
-//       });
-//     } else {
-//       fetchData({ startDate: dateRange.startDate, endDate: dateRange.endDate });
-//     }
-//   }, [dateRange.startDate, dateRange.endDate]);
-
-
-
   return (
     <div style={{ textAlign: "center" }}>
       <h3 className="font-bold text-[30px] pb-2 ">Lịch sử</h3>
+      
       <input
           type="text"
           className="bg-white text-gray-700 rounded-md py-2 px-4 w-full"
-          placeholder="Tìm kiếm nhãn hiệu"
+          placeholder="Nhập thông tin cần tìm kiếm"
           onChange={(e) => setKeySearch(e.target.value)}
         />
          <div>
-        <label htmlFor="startDate">Chọn ngày bắt đầu:</label>
+         <span>Lọc theo khoảng thời gian</span>
+        <div>
+        <label htmlFor="startDate">Chọn ngày bắt đầu: </label>
         <input
           type="datetime-local"
           id="startDate"
@@ -241,7 +234,7 @@ useEffect(() => {
           onChange={handleStartDateChange}
         />
 
-        <label htmlFor="endDate">Chọn ngày kết thúc:</label>
+        <label htmlFor="endDate">Chọn ngày kết thúc: </label>
         <input
           type="datetime-local"
           id="endDate"
@@ -249,7 +242,8 @@ useEffect(() => {
           value={dateRange.endDate}
           onChange={handleEndDateChange}
         />
-        
+        </div>
+
       </div>
      
       {/* <div>

@@ -38,9 +38,7 @@ function App() {
           <Route path={path.LOGIN} element={<Login />} />
           {/* <Route path={path.DETAIL} element={<Detail />} /> */}
         </Route>
-
         <Route path={path.SYSTEM} element={<System />}>
-
           {/* <Route path={path.LOGIN} element={<Login />} /> */}
           <Route path={path.STATISTICS} element={<Statistics />} />
           <Route path={path.PRODUCT_CARD_STORE} element={<ProductCardStore />} />

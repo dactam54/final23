@@ -15,10 +15,16 @@ export const adminSidebar = [
     path: path.SYSTEM + "/" + path.STATISTICS,
   },
   {
-    name: "Quản lý thẻ kho",
+    name: "Quản lý hàng hóa",
     icons: <RiBillLine size={22} />,
-    path: path.SYSTEM + "/" + path.PRODUCT_CARD_STORE,
+    path: path.SYSTEM + "/" + path.PRODUCT_ALL,
   },
+
+  // {
+  //   name: "Quản lý thẻ kho",
+  //   icons: <RiBillLine size={22} />,
+  //   path: path.SYSTEM + "/" + path.PRODUCT_CARD_STORE,
+  // },
   {
     name: "Quản lý nhãn hiệu",
     icons: <MdOutlineBrandingWatermark size={22} />,
@@ -58,17 +64,13 @@ export const adminSidebar = [
   },
 
   {
-    name: "Lịch sử phiếu",
+    name: "Lịch sử Nhập/Xuất",
     icons: <RiBillLine size={22} />,
     path: path.SYSTEM + "/" + path.HISTORY_ALL_BILL,
   },
 
   
-  {
-    name: "Tất cả sản phẩm",
-    icons: <RiBillLine size={22} />,
-    path: path.SYSTEM + "/" + path.PRODUCT_ALL,
-  },
+  
   // {
   //   name: "Báo cáo",
   //   icons: <RiBillLine size={22} />,

@@ -121,6 +121,8 @@ const AllTheKho = () => {
         endDate,
       });
     }
+
+    console.log("dateRange", dateRange);
     const response = await apiGetAllTheKhos({
       startDate: dateRange.startDate,
       endDate: dateRange.endDate,
@@ -165,7 +167,7 @@ const AllTheKho = () => {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <h3 className="font-bold text-[30px] pb-2 ">Thông tin phiếu nhập</h3>
+      <h3 className="font-bold text-[30px] pb-2 ">Thông tin phiếu</h3>
       <div>
         <label htmlFor="startDate">Chọn ngày bắt đầu:</label>
         <input
@@ -188,7 +190,7 @@ const AllTheKho = () => {
 
 
       
-      <div style={{display: 'flex', flexDirection:'row', marginRight:'20px'}}>
+      {/* <div style={{display: 'flex', flexDirection:'row', marginRight:'20px'}}>
 
       <button
               type="button"
@@ -209,7 +211,7 @@ const AllTheKho = () => {
               <span>Quản lý hàng hóa</span>
             </button>
       </div>
-      
+       */}
 
       {loading ? (
         <Loading />
