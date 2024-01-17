@@ -2,34 +2,30 @@ import path from "./utils/path";
 import { Route, Routes } from "react-router-dom";
 import { Public, Login, Detail } from "./pages/public";
 import { useEffect } from "react";
-import { useDispatch } from 'react-redux'
-import * as actions from './store/actions'
+import { useDispatch } from "react-redux";
+import * as actions from "./store/actions";
 import actionTypes from "./store/actions/actionTypes";
 import {
   System,
   ManageBrand,
   ManageProduct,
-  ManageUser,
   Statistics,
-  ManageExportBill,
   ManageExport,
   ManageImport,
-  ManageImportBill,
+  WarehouseCard,
+  HistoryBill,
+  Warehouse,
   PDF,
-  ProductCardStore,
-  AllTheKho,
-  HistoryAllBill,
 } from "./pages/private";
 
-
 import { ToastContainer } from "react-toastify";
-import ProductAll from "./pages/private/ProductAll";
+import ProductAll from "./pages/private/Warehouse";
 function App() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
     // dispatch(actions.getCatalogs())
-    dispatch(actions.getBrands())
-  }, [])
+    dispatch(actions.getBrands());
+  }, []);
 
   return (
     <div className="relative h-screen">
@@ -39,23 +35,21 @@ function App() {
           {/* <Route path={path.DETAIL} element={<Detail />} /> */}
         </Route>
         <Route path={path.SYSTEM} element={<System />}>
-          {/* <Route path={path.LOGIN} element={<Login />} /> */}
           <Route path={path.STATISTICS} element={<Statistics />} />
-          <Route path={path.PRODUCT_CARD_STORE} element={<ProductCardStore />} />
+          <Route path={path.WAREHOUSE} element={<Warehouse />} />
           <Route path={path.MANAGE_BRAND} element={<ManageBrand />} />
           <Route path={path.MANAGE_PRODUCT} element={<ManageProduct />} />
           <Route path={path.MANAGE_IMPORT} element={<ManageImport />} />
           <Route path={path.MANAGE_EXPORT} element={<ManageExport />} />
+          <Route path={path.WAREHOUSE_CARD} element={<WarehouseCard />} />
+          <Route path={path.HISTORY_BILL} element={<HistoryBill />} />
+
+          <Route path={"*"} element={<Statistics />} />
+          {/* <Route path={path.PRODUCT_CARD_STORE} element={<ProductCardStore />} /> */}
+          {/* <Route path={path.MANAGE_USER} element={<ManageUser />} /> */}
           {/* <Route path={path.MANAGE_Bill_EXPORT} element={<ManageExportBill />}/>
           <Route path={path.MANAGE_Bill_IMPORT} element={<ManageImportBill />}/> */}
-          <Route path={path.MANAGE_USER} element={<ManageUser />} />
-          <Route path={path.ALL_THE_KHO} element={<AllTheKho />} />
-          <Route path={path.HISTORY_ALL_BILL} element={<HistoryAllBill />} />
-          <Route path={path.PRODUCT_ALL} element={<ProductAll />} />
-          <Route path={"*"} element={<Statistics />} />
-          
         </Route>
-
       </Routes>
 
       <ToastContainer

@@ -64,7 +64,7 @@ const columns = [
     editable: true,
   },
 ];
-const AllTheKho = () => {
+const WarehouseCard = () => {
   const dispatch = useDispatch();
   const [data, setData] = useState(null);
   const [page, setPage] = useState(0);
@@ -343,4 +343,4 @@ const AllTheKho = () => {
   );
 };
 
-export default AllTheKho;
+export default WarehouseCard;

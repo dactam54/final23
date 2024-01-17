@@ -75,7 +75,7 @@ const columns = [
     editable: true,
   },
 ];
-const ProductAll = () => {
+const Warehouse = () => {
   const [data, setData] = useState(null);
   const [data1, setData1] = useState(null);
   const [rowPerPage, setRowPerPage] = useState(10);
@@ -191,7 +191,7 @@ const ProductAll = () => {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <h3 className="font-bold text-[30px] pb-2 ">Quản lý hàng hóa</h3>
+      <h3 className="font-bold text-[30px] pb-2 ">Thông tin kho</h3>
       <input
         type="text"
         className="bg-white text-gray-700 rounded-md py-2 px-4 w-full"
@@ -401,4 +401,4 @@ const ProductAll = () => {
   );
 };
 
-export default ProductAll;
+export default Warehouse;

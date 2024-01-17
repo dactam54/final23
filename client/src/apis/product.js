@@ -13,6 +13,7 @@ export const apiGetProducts = (params) =>
       reject(error);
     }
   });
+  
 export const apiGetProductById = (pid) =>
   new Promise(async (resolve, reject) => {
     try {

@@ -15,16 +15,10 @@ export const adminSidebar = [
     path: path.SYSTEM + "/" + path.STATISTICS,
   },
   {
-    name: "Quản lý hàng hóa",
+    name: "Thông tin kho",
     icons: <RiBillLine size={22} />,
-    path: path.SYSTEM + "/" + path.PRODUCT_ALL,
+    path: path.SYSTEM + "/" + path.WAREHOUSE,
   },
-
-  // {
-  //   name: "Quản lý thẻ kho",
-  //   icons: <RiBillLine size={22} />,
-  //   path: path.SYSTEM + "/" + path.PRODUCT_CARD_STORE,
-  // },
   {
     name: "Quản lý nhãn hiệu",
     icons: <MdOutlineBrandingWatermark size={22} />,
@@ -45,6 +39,17 @@ export const adminSidebar = [
     icons: <FaProductHunt size={22} />,
     path: path.SYSTEM + "/" + path.MANAGE_EXPORT,
   },
+  {
+    name: "Thẻ kho",
+    icons: <RiBillLine size={22} />,
+    path: path.SYSTEM + "/" + path.WAREHOUSE_CARD,
+  },
+
+  {
+    name: "Lịch sử Nhập/Xuất",
+    icons: <RiBillLine size={22} />,
+    path: path.SYSTEM + "/" + path.HISTORY_BILL,
+  },
   // {
   //   name: "Lịch sử nhập",
   //   icons: <RiBillLine size={22} />,
@@ -57,20 +62,6 @@ export const adminSidebar = [
   //   path: path.SYSTEM + "/" + path.MANAGE_Bill_EXPORT,
   // },
 
-  {
-    name: "Thẻ kho",
-    icons: <RiBillLine size={22} />,
-    path: path.SYSTEM + "/" + path.ALL_THE_KHO,
-  },
-
-  {
-    name: "Lịch sử Nhập/Xuất",
-    icons: <RiBillLine size={22} />,
-    path: path.SYSTEM + "/" + path.HISTORY_ALL_BILL,
-  },
-
-  
-  
   // {
   //   name: "Báo cáo",
   //   icons: <RiBillLine size={22} />,

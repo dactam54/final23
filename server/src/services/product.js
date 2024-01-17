@@ -155,6 +155,7 @@ export const getProductById = (pid) =>
       reject(error);
     }
   });
+  
 export const ratings = (payload) =>
   new Promise(async (resolve, reject) => {
     try {

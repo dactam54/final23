@@ -66,7 +66,7 @@ const columns = [
         editable: true,
       },
     ];
-const HistoryAllBill = () => {
+const HistoryBill = () => {
 
   const [data, setData] = useState(null);
   const [page, setPage] = useState(0);
@@ -416,4 +416,4 @@ useEffect(() => {
   );
 };
 
-export default HistoryAllBill;
+export default HistoryBill;

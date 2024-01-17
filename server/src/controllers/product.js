@@ -40,6 +40,7 @@ export const getProductById = async (req, res) => {
     });
   }
 };
+
 export const ratings = async (req, res) => {
   const { id } = req.user;
   const { pid, score } = req.body;
